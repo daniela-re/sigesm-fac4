@@ -12,14 +12,17 @@ public function dashboard(Request $request)
 {
         $user = auth()->user();
 
-        if ($user->rol === 'admin') {
+        if ($user->rol === 'Administrador') {
             return redirect()->route('admin.dashboard');
-        } elseif ($user->rol === 'asistente') {
+        } elseif ($user->rol === 'Asistente') {
             return redirect()->route('asistente.dashboard');
         } else {
-            return redirect('/');
+            return redirect()->route('logout');
         }
 }
 
+public function profile(){
+    return view('configurar_perfil');
+}
 
 }

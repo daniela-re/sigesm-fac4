@@ -55,7 +55,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="configurar_perfil.html" class="btn btn-default btn-flat">Perfil</a>
+                                        <a href="{{route('profile')}}" class="btn btn-default btn-flat">Perfil</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="{{ route('logout') }}"   onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default btn-flat">Desconectarse</a>
@@ -92,8 +92,8 @@
                             <i class="fa fa-dashboard"></i> <span>Gestión de matrícula</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="Asistente_1.html"><i class="fa fa-circle-o"></i>Gestion de Recursos Disponibles</a></li>
-                            <li><a href="Asistente_2.html"><i class="fa fa-circle-o"></i>Gestion de Recursos Sobrantes</a></li>
+                            <li><a href=" {{ route('asistente.dashboard') }} "><i class="fa fa-circle-o"></i>Gestion de Recursos Disponibles</a></li>
+                            <li><a href="{{ route('asistente.dashboard_2') }}"><i class="fa fa-circle-o"></i>Gestion de Recursos Sobrantes</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -121,7 +121,7 @@
                                 <h3 class="box-title">Operaciones</h3>
                             </div>
                             <div class="box-body">
-                                <button type="button" class="btn btn-block btn-primary">Insertar <span class="fa fa-plus"> </span></button>
+                                <button type="button"  onclick="Insertar();" class="btn btn-block btn-primary">Insertar <span class="fa fa-plus"> </span></button>
                                 <button type="button" class="btn btn-block btn-success">Exportar registro <i class="fa fa-download"></i></button>
                             </div>
                         </div>
@@ -156,16 +156,27 @@
                                         <th>Disponibilidad</th>
                                         <th>Acciones</th>
                                     </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Mtrícula 1</td>
-                                        <td class="border px-4 py-2 ">55</td>
-                                        <td class="border px-4 py-2 ">0%</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(2)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                            <button wire:click="borrar(2)" class="">Modificar</button>
-                                        </td>
-                                    </tr>
+
+                                        @forelse ($recursos as $recurso)
+                                        <tr>
+                                            <!-- Datos del recurso ... -->
+                                            <td>{{ $recurso->id }}</td>
+                                            <td>{{ $recurso->categoria }}</td>
+                                            <td>{{ $recurso->cantidad }}</td>
+                                            <td>{{ $recurso->disponibilidad }}</td>
+                                            <td class="border px-4 py-2 ">
+                                                <button class="" onclick="Eliminar({{ $recurso->id }})" >Eliminar</button>
+                                                <button class="" onclick="Modificar(this)" >Modificar</button>
+                                                @if($recurso->disponibilidad > 0)
+                                                    <button class="" onclick="Utilizar(this)" >Utilizar</button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4">No hay recursos.</td>
+                                                </tr>
+                                        @endforelse
                                 </table>
                             </div>
 
@@ -186,44 +197,166 @@
             <strong>Copyright &copy; 2024 <a href="">Equipo de Programación Web</a></strong>
         </footer>
 
-        <!-- Control Sidebar -->
-        <!-- /.control-sidebar -->
-        <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
     </div>
     <!-- ./wrapper -->
 
-    <!-- jQuery 2.1.4 -->
-    <script src="./Archivos/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-    <!-- Bootstrap 3.3.5 -->
-    <script src="./Archivos/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Slimscroll -->
-    <script src="./Archivos/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-    <script src="./Archivos/dist/js/app.min.js"></script>
-    <script src="./Archivos/dist/js/demo.js"></script>
-
-
-    <!-- Mensaje para confirmar la eliminacion -->
-    
     <script>
-        function Eliminar() {
-           // const itemId = this.getAttribute('data-id');
-            // Muestra un mensaje de confirmación con SweetAlert
+
+        //-----------------------------------------------------
+        // Función para mostrar la ventana emergente de modificar
+
+        function Modificar(id) {
+          // Crear un formulario HTML con campos para categoría, cantidad y disponibilidad
+          var filaSeleccionada =  id.parentNode.parentNode;
+          var form = `
+            <form id="productForm" action="{{route('asistente.update')}}" method="POST">
+                @csrf
+              <div class="form-group">
+                <label for="categoria">Categoría:</label>
+                <input type="text" class="form-control" id="categoria" value="${filaSeleccionada.children[1].innerText}" required>
+              </div>
+              <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" class="form-control" id="cantidad" value="${filaSeleccionada.children[2].innerText}" required>
+              </div>
+              <div>
+            <input type="text" class="form-control" name="id" value="${filaSeleccionada.children[0].innerText}" style="display:none;">
+                </div>
+              <div class="form-group">
+                <label for="disponibilidad">Disponibilidad:</label>
+                <input type="number" class="form-control" name="disponibilidad" id="disponibilidad" min="0" value="${filaSeleccionada.children[3].innerText}" max="${filaSeleccionada.children[2].innerText}"  required>
+              </div>
+            </form>
+          `;
+          // Mostrar SweetAlert con el formulario
+          Swal.fire({
+            title:'Modificar Producto',
+            html: form,
+            showCancelButton: true,
+            confirmButtonText: 'Modificar',
+            cancelButtonText: 'Cancelar',
+            preConfirm: function() {
+              // Obtener los valores de los campos del formulario
+              var categoria = document.getElementById('categoria').value;
+              var cantidad = document.getElementById('cantidad').value;
+              var disponibilidad = document.getElementById('disponibilidad').value;
+              // Validar que los campos no estén vacíos
+              if (categoria.trim() === '' || cantidad.trim() === '' || disponibilidad.trim() === '') {
+                Swal.showValidationMessage('Todos los campos son obligatorios.');
+                return false;
+              }
+              // Validar que la categoría no tenga caracteres especiales, excepto tildes
+              if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s.,]+$/u.test(categoria)) {
+                Swal.showValidationMessage('La categoría no puede tener caracteres especiales');
+                return false;
+              }
+              // Enviarlos al servidor
+              document.getElementById('productForm').submit();
+            }
+          });
+        }
+
+        //-----------------------------------------------------
+        // Funcion para mostrar el mensaje de pasar los recursos para sobrantes
+
+        function Utilizar(id) {
+            var filaSeleccionada =  id.parentNode.parentNode;
+            var form = `
+            <form id="productForm" action="{{route('asistente.utilizar')}}" method="POST">
+                @csrf
+            <label for="descuento">Descuento de Disponibilidad de ${filaSeleccionada.children[1].innerText}:</label>
+            <input type="number" name="descuento" class="form-control" min="1" max="${filaSeleccionada.children[3].innerText}" value="${filaSeleccionada.children[3].innerText}" required>
+                <div>
+            <input type="text" class="form-control" name="id" value="${filaSeleccionada.children[0].innerText}" style="display:none;">
+                </div>
+            </form>
+          `;
+          // Mostrar SweetAlert con el formulario
+          Swal.fire({
+            title:'Utilizar Recurso',
+            html: form,
+            showCancelButton: true,
+            confirmButtonText: 'Utilizar',
+            cancelButtonText: 'Cancelar',
+            preConfirm: function() {
+              // Enviar datos al servidor
+              document.getElementById('productForm').submit();
+            }
+          });
+        }
+
+        //-----------------------------------------------------
+        // Función para mostrar la ventana emergente Insertar
+
+        function Insertar() {
+          var form = `
+          <form id="productForm" action="{{route('asistente.create')}}" method="POST">
+                @csrf
+              <div class="form-group">
+                <label for="categoria">Categoría:</label>
+                <input type="text" class="form-control" name="categoria" id="categoria" required>
+              </div>
+              <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+              </div>
+              <div class="form-group">
+                <label for="disponibilidad">Disponibilidad:</label>
+                <input type="number" class="form-control" id="disponibilidad" name="disponibilidad" placeholder="Máxima" disabled required>
+              </div>
+            </form>
+          `;
+          // Mostrar SweetAlert con el formulario
+          Swal.fire({
+            title: 'Añadir elemento',
+            html: form,
+            showCancelButton: true,
+            confirmButtonText: 'Añadir',
+            cancelButtonText: 'Cancelar',
+            preConfirm: function() {
+              // Obtener los valores de los campos del formulario
+              var categoria = document.getElementById('categoria').value;
+              var cantidad = document.getElementById('cantidad').value;
+              document.getElementById('disponibilidad').value = cantidad;
+              document.getElementById('disponibilidad').disabled = false;
+              // Validar que los campos no estén vacíos
+            if (categoria.trim() === '' || cantidad.trim() === '') {
+            Swal.showValidationMessage('Todos los campos son obligatorios.');
+            return false;
+            }
+              // Validar que la categoría no contenga caracteres especiales, excepto tildes
+            if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/.test(categoria)) {
+            Swal.showValidationMessage('La categoría no puede contener caracteres especiales, excepto tildes.');
+            return false;
+            }
+            // Validar que cantidad y disponibilidad sean valores numéricos
+            if (isNaN(cantidad)) {
+            Swal.showValidationMessage('La cantidad y la disponibilidad deben ser valores numéricos.');
+            return false;
+            }
+              // Enviar datos al servidor
+              document.getElementById('productForm').submit();
+            }
+          });
+        }
+        
+        //-----------------------------------------------------
+        //   Mensaje para confirmar la eliminacion de un recurso
+    
+        function Eliminar(id) {
             Swal.fire({ title: '¿Estás seguro?',
               text: 'Esta acción no se puede deshacer',  icon: 'warning',
               showCancelButton: true, confirmButtonText: 'Sí, eliminar',
               cancelButtonText: 'Cancelar'
             }).then((result) => {
               if (result.isConfirmed) {
-                // logica de eliminar
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado', 'success');
-              }
+                // Ruta para eliminar
+                window.location.href = "{{ url('/asistente') }}/" + id + "/delete";
+                }
             });
         };
+
       </script>
-
-
 </body>
 
 @endsection

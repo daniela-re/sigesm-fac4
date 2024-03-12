@@ -25,6 +25,34 @@
 
     @yield('content')
 
+    @section('errorscr')
+    
+    <script>
+    // Mostrar SweetAlert en caso de éxito
+    @if(session('success'))
+        mostrarSweetAlert('{{ session('success') }}', 'success');
+    @endif
+
+    // Mostrar SweetAlert si hay errores
+    @if($errors->any())
+        var mensajeError = '<ul>';
+        @foreach ($errors->all() as $error)
+            mensajeError += '<li>{{ $error }}</li>';
+        @endforeach
+        mensajeError += '</ul>';
+        mostrarSweetAlert(mensajeError, 'error');
+    @endif
+
+    function mostrarSweetAlert(mensaje, tipo) {
+        Swal.fire({  title: mensaje, icon: tipo,
+            toast: true, position: 'top-end',
+            showConfirmButton: false,  timer: 10000
+        });
+    }
+    </script>
+
+        @show
+
     <!-- jQuery 2.1.4 -->
     <script src="{{ asset('Archivos/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
     <!-- Bootstrap 3.3.5 -->

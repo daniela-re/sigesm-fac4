@@ -54,7 +54,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="configurar_perfil.html" class="btn btn-default btn-flat">Perfil</a>
+                                        <a href="{{route('profile')}}" class="btn btn-default btn-flat">Perfil</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="{{ route('logout') }}"   onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default btn-flat">Desconectarse</a>
@@ -91,8 +91,8 @@
                             <i class="fa fa-dashboard"></i> <span>Administración</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="Administrador_1.html"><i class="fa fa-circle-o"></i>Resumen</a></li>
-                            <li><a href="Administrador_2.html"><i class="fa fa-circle-o"></i>Gestión de usuarios</a></li>
+                            <li><a href=" {{route('admin.dashboard')}} "><i class="fa fa-circle-o"></i>Resumen</a></li>
+                            <li><a href=" {{route('admin.dashboard_2')}} "><i class="fa fa-circle-o"></i>Gestión de usuarios</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -118,7 +118,7 @@
                                 <h3 class="box-title">Operaciones</h3>
                             </div>
                             <div class="box-body">
-                                <button type="button" class="btn btn-block btn-primary">Insertar <span class="fa fa-plus"> </span></button>
+                                <button type="button" onclick="Insertar();" class="btn btn-block btn-primary">Insertar <span class="fa fa-plus"> </span></button>
                                 <button type="button" class="btn btn-block btn-success">Exportar registro <i class="fa fa-download"></i></button>
                             </div>
                         </div>
@@ -141,7 +141,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.box-header -->
+                            
+
                             <div class="box-body table-responsive no-padding">
                                 <table class="table table-hover">
                                     <tr>
@@ -151,151 +152,17 @@
                                         <th>Rol</th>
                                         <th>Acciones</th>
                                     </tr>
+                                    @foreach($users as $user)
                                     <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Alejandro Martinez</td>
-                                        <td class="border px-4 py-2 ">alemm@example.net</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
+                                        <td class="border px-4 py-2 ">{{ $user->id }}</td>
+                                        <td class="border px-4 py-2 ">{{ $user->name }}</td>
+                                        <td class="border px-4 py-2 ">{{ $user->email }}</td>
+                                        <td class="border px-4 py-2 ">{{ $user->rol }}</td>
                                         <td class="border px-4 py-2 ">
-                                            <button class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
+                                            <button class="eliminar-btn " onclick="Eliminar({{ $user->id }})" >Eliminar</button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">2</td>
-                                        <td class="border px-4 py-2 ">Mary Luisa</td>
-                                        <td class="border px-4 py-2 ">maryll@example.com</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(3)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Alejandro Martinez</td>
-                                        <td class="border px-4 py-2 ">alemm@example.net</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">2</td>
-                                        <td class="border px-4 py-2 ">Mary Luisa</td>
-                                        <td class="border px-4 py-2 ">maryll@example.com</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(3)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Alejandro Martinez</td>
-                                        <td class="border px-4 py-2 ">alemm@example.net</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">2</td>
-                                        <td class="border px-4 py-2 ">Mary Luisa</td>
-                                        <td class="border px-4 py-2 ">maryll@example.com</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(3)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Alejandro Martinez</td>
-                                        <td class="border px-4 py-2 ">alemm@example.net</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">2</td>
-                                        <td class="border px-4 py-2 ">Mary Luisa</td>
-                                        <td class="border px-4 py-2 ">maryll@example.com</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(3)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Alejandro Martinez</td>
-                                        <td class="border px-4 py-2 ">alemm@example.net</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">2</td>
-                                        <td class="border px-4 py-2 ">Mary Luisa</td>
-                                        <td class="border px-4 py-2 ">maryll@example.com</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(3)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Alejandro Martinez</td>
-                                        <td class="border px-4 py-2 ">alemm@example.net</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">2</td>
-                                        <td class="border px-4 py-2 ">Mary Luisa</td>
-                                        <td class="border px-4 py-2 ">maryll@example.com</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(3)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Alejandro Martinez</td>
-                                        <td class="border px-4 py-2 ">alemm@example.net</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">2</td>
-                                        <td class="border px-4 py-2 ">Mary Luisa</td>
-                                        <td class="border px-4 py-2 ">maryll@example.com</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(3)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Alejandro Martinez</td>
-                                        <td class="border px-4 py-2 ">alemm@example.net</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2 ">2</td>
-                                        <td class="border px-4 py-2 ">Mary Luisa</td>
-                                        <td class="border px-4 py-2 ">maryll@example.com</td>
-                                        <td class="border px-4 py-2 ">asistente</td>
-                                        <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(3)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                        </td>
-                                    </tr>
-
+                                    @endforeach
                                 </table>
                             </div>
 
@@ -313,36 +180,93 @@
 
         <div class="control-sidebar-bg"></div>
     </div>
-    <!-- ./wrapper -->
 
-    <!-- jQuery 2.1.4 -->
-    <script src="./Archivos/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-    <!-- Bootstrap 3.3.5 -->
-    <script src="./Archivos/bootstrap/js/bootstrap.min.js"></script>
-    <script src="./Archivos/plugins/fastclick/fastclick.js"></script>
-    <script src="./Archivos/dist/js/app.min.js"></script>
-    <script src="./Archivos/dist/js/demo.js"></script>
-
-
-    <!-- Mensaje para confirmar la eliminacion -->
-    
     <script>
-        function Eliminar() {
-           // const itemId = this.getAttribute('data-id');
-            // Muestra un mensaje de confirmación con SweetAlert
-            Swal.fire({ title: '¿Estás seguro?',
-              text: 'Esta acción no se puede deshacer',  icon: 'warning',
-              showCancelButton: true, confirmButtonText: 'Sí, eliminar',
-              cancelButtonText: 'Cancelar'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                // logica de eliminar
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado', 'success');
+
+        // Función para mostrar la ventana emergente de crear un usuario
+        function Insertar() {
+          // Crear un formulario HTML con campos para nombre, correo y contraseña
+          var form = `
+            <form id="insertForm" method="POST" action="{{route('admin.create')}}" >
+                @csrf
+              <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="correo">Correo:</label>
+                <input type="email" class="form-control" id="correo" name="email">
+              </div>
+              <div class="form-group">
+                <label for="rol">Rol:</label>
+                <select class="form-control" id="rol" name="rol">
+                    <option value="Asistente">Asistente</option>
+                    <option value="Administrador">Administrador</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" class="form-control" id="contrasena" name="password">
+              </div>
+            </form>
+          `;
+        
+          // Mostrar SweetAlert con el formulario
+          Swal.fire({
+            title: 'Insertar usuario',
+            html: form,
+            showCancelButton: true,
+            confirmButtonText: 'Añadir',
+            cancelButtonText: 'Salir',
+            preConfirm: function() {
+              // Obtener los valores de los campos del formulario
+              var nombre = document.getElementById('nombre').value;
+              var correo = document.getElementById('correo').value;
+              var contrasena = document.getElementById('contrasena').value;
+        
+              // Validar el nombre (no debe contener caracteres especiales)
+              if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s.,]+$/u.test(nombre)) {
+                Swal.showValidationMessage('El nombre no es válido.');
+                return false;
               }
+        
+              // Validar el correo electrónico
+              if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+                Swal.showValidationMessage('Ingrese un correo electrónico válido.');
+                return false;
+              }
+        
+              // Validar la contraseña (mínimo 8 caracteres)
+              if (contrasena.length < 8) {
+                Swal.showValidationMessage('La contraseña debe tener al menos 8 caracteres.');
+                return false;
+              }
+        
+              // Ejecutar el submit del formulario, enviando los datos al servidor
+              document.getElementById('insertForm').submit();
+
+            }
+          });
+        }
+
+        //  Mensaje para confirmar la eliminacion
+        function Eliminar(id) {
+
+        // Muestra un mensaje de confirmación con SweetAlert
+            Swal.fire({ title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer',  icon: 'warning',
+                showCancelButton: true, confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                
+                // logica de eliminar
+                window.location.href = "{{ url('/admin') }}/" + id + "/delete";
+                }
             });
         };
-      </script>
-
+    
+    </script>
 
 </body>
 @endsection

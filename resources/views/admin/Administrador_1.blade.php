@@ -43,7 +43,6 @@
                                 <!-- User image -->
                                 <li class="user-header">
                                     <img src="{{ asset('Archivos/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
-
                                     <p>
                                         Administrador {{ Auth::user()->name }}
                                         <small></small>
@@ -54,7 +53,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="configurar_perfil.html" class="btn btn-default btn-flat">Perfil</a>
+                                        <a href="{{route('profile')}}" class="btn btn-default btn-flat">Perfil</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="{{ route('logout') }}"   onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default btn-flat">Desconectarse</a>
@@ -91,8 +90,8 @@
                             <i class="fa fa-dashboard"></i> <span>Administración</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="Administrador_1.html"><i class="fa fa-circle-o"></i>Resumen</a></li>
-                            <li><a href="Administrador_2.html"><i class="fa fa-circle-o"></i>Gestión de usuarios</a></li>
+                            <li><a href=" {{route('admin.dashboard')}} "><i class="fa fa-circle-o"></i>Resumen</a></li>
+                            <li><a href=" {{route('admin.dashboard_2')}} "><i class="fa fa-circle-o"></i>Gestión de usuarios</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -119,7 +118,7 @@
                         <!-- small box -->
                         <div class="small-box bg-aqua">
                             <div class="inner">
-                                <h3>150</h3>
+                                <h3>{{$count}}</h3>
 
                                 <p>Usuarios agregados</p>
                             </div>
@@ -134,15 +133,47 @@
                         <!-- small box -->
                         <div class="small-box bg-yellow">
                             <div class="inner">
-                                <h3>5</h3>
+                                <h3>{{$count_recursos}}</h3>
 
-                                <p>Restablecimientos de enlaces</p>
+                                <p>Recursos totales</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="#" class="small-box-footer">Consultar detalles <i class="fa fa-arrow-circle-right"></i></a>
+                            <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg" class="small-box-footer">Consultar detalles <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
+                    </div>
+
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="Recursos almacenados en el sistema" aria-hidden="false">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content pd-4">
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Categoría</th>
+                                        <th>Cantidad</th>
+                                        <th>Disponibilidad</th>
+                                    </tr>
+                                    
+                                    @forelse ($recursos as $recurso)
+                                    <tr>
+                                        <!-- Datos del recurso ... -->
+                                        <td>{{ $recurso->id }}</td>
+                                        <td>{{ $recurso->categoria }}</td>
+                                        <td>{{ $recurso->cantidad }}</td>
+                                        <td>{{ $recurso->disponibilidad }}</td>
+                                    </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4">No hay recursos.</td>
+                                            </tr>
+                                    @endforelse
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     </div>
 
                     <!-- ./col -->

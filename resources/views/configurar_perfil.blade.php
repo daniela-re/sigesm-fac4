@@ -43,7 +43,6 @@
                                 <!-- User image -->
                                 <li class="user-header">
                                     <img src="{{ asset('Archivos/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
-
                                     <p>
                                         {{ Auth::user()->name }}
                                         <small>{{ Auth::user()->rol }}</small>
@@ -118,10 +117,10 @@
                                         <div class="user-block">
                                             <img class="img-circle img-bordered-sm" src="{{ asset('Archivos/dist/img/user2-160x160.jpg') }}" alt="user image">
                                             <span class="username">
-                                    <a href="#">$Nombre</a>
+                                    <a href="#">{{ Auth::user()->name }}</a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                   </span>
-                                            <span class="description">Foto subida el xx-xx-2024</span>
+                                            <span class="description">{{ Auth::user()->rol }}</span>
                                         </div>
                                         <!-- /.user-block -->
 
@@ -130,7 +129,7 @@
                                                 <label for="inputName" class="col-sm-2 control-label">Nombre</label>
 
                                                 <div class="col-sm-10">
-                                                    <input type="text" id="nombre" class="form-control" id="inputName" placeholder="Nombre">
+                                                    <input type="text" id="name" class="form-control" id="inputName" placeholder="Nombre">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -242,7 +241,7 @@
 
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
-                                                <button type="button" id="eliminar_cuenta" class="btn btn-danger">Eliminar cuenta</button>
+                                                <button type="button" onclick="MensajeEliminar_Cuenta()" class="btn btn-danger">Eliminar cuenta</button>
                                             </div>
                                         </div>
                                     </form>
@@ -268,43 +267,26 @@
     </div>
     <!-- ./wrapper -->
 
-    <!-- jQuery 2.1.4 -->
-    <script src="./Archivos/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-    <!-- Bootstrap 3.3.5 -->
-    <script src="./Archivos/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Slimscroll -->
-    <script src="./Archivos/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-    <!-- FastClick -->
-    <script src="./Archivos/plugins/fastclick/fastclick.js"></script>
-    <!-- AdminLTE App -->
-    <script src="./Archivos/dist/js/app.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="./Archivos/dist/js/demo.js"></script>
+    <!-- Función de pregunta para la elimianción de la cuenta -->
+   <script>
 
-    <!-- Función de pregunta para la elimianción de la cuenta, mediante eventos del click  -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('eliminar_cuenta').addEventListener('click', function () {
-                Swal.fire({  title: '¿Estás seguro?',
-                  text: 'Esta acción eliminará permanentemente tu cuenta.',
-                  icon: 'warning',   showCancelButton: true,
-                  confirmButtonText: 'Sí, eliminar cuenta',
-                  cancelButtonText: 'Cancelar',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        //  Petición de elimiar cuenta
+    function MensajeEliminar_Cuenta() {
+        // const itemId = this.getAttribute('data-id');
+         // Muestra un mensaje de confirmación con SweetAlert
+         Swal.fire({ title: '¿Estás seguro?',
+           text: 'Esta acción no se puede deshacer',  icon: 'warning',
+           showCancelButton: true, confirmButtonText: 'Sí, eliminar',
+           cancelButtonText: 'Cancelar'
+         }).then((result) => {
+           if (result.isConfirmed) {
+             // logica de eliminar
+             Swal.fire('Eliminado', 'La cuenta ha sido eliminada', 'success');
+           }
+         });
+     };
 
-                        Swal.fire('Cuenta eliminada', 'Tu cuenta ha sido eliminada correctamente.', 'success');
-                    }
-                });
-            });
-        });
-    </script>
+    // Validar formularios 
 
-
-    <!-- Validar formularios -->
-
-    <script>
         function validarFormularioA() {
             var email = document.getElementById('email').value;
 
@@ -335,9 +317,9 @@
             });
             return false;  }
         }
+
     </script>
 
 </body>
-
 
 @endsection

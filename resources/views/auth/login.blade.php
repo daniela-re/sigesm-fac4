@@ -40,15 +40,11 @@
                 </div>
 
             </form>
-        @if (Route::has('password.request'))
-            <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
-        @endif
             <br>
-            <a href="" class="text-center">Registrar un nuevo usuario</a>
-
+            <a onclick="document.getElementById('email').value = 'admin@uci.cu'" class="text-center">Registrar un nuevo usuario</a>
         </div>
     </div>
-
+    @section('errorscr')
     @if ($errors->any())
     <script>
         Swal.fire({
@@ -57,7 +53,8 @@
             text: 'El usuario o contraseña son incorrectos.',
         });
     </script>
-    @endif  
+    @endif
+    @endsection
     
     <script>
         function validarFormulario() {

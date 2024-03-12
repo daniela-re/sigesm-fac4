@@ -54,7 +54,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="configurar_perfil.html" class="btn btn-default btn-flat">Perfil</a>
+                                        <a href="{{route('profile')}}" class="btn btn-default btn-flat">Perfil</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="{{ route('logout') }}"   onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default btn-flat">Desconectarse</a>
@@ -92,8 +92,8 @@
                             <i class="fa fa-dashboard"></i> <span>Gestión de matrícula</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="Asistente_1.html"><i class="fa fa-circle-o"></i>Gestion de Recursos Disponibles</a></li>
-                            <li><a href="Asistente_2.html"><i class="fa fa-circle-o"></i>Gestion de Recursos Sobrantes</a></li>
+                            <li><a href=" {{ route('asistente.dashboard') }} "><i class="fa fa-circle-o"></i>Gestion de Recursos Disponibles</a></li>
+                            <li><a href=" {{ route('asistente.dashboard_2') }}"><i class="fa fa-circle-o"></i>Gestion de Recursos Sobrantes</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -121,7 +121,6 @@
                                 <h3 class="box-title">Operaciones</h3>
                             </div>
                             <div class="box-body">
-                                <button type="button" class="btn btn-block btn-primary">Insertar <span class="fa fa-plus"> </span></button>
                                 <button type="button" class="btn btn-block btn-success"> Exportar registro <i class="fa fa-download"></i></button>
                             </div>
                         </div>
@@ -152,23 +151,30 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Categoría</th>
-                                        <th>Cantidad</th>
-                                        <th>Disponibilidad</th>
+                                        <th>Cantidad utilizada</th>
+                                        <th>Cantidad disponible</th>
                                         <th>Acciones</th>
                                     </tr>
+
+                                    @forelse ($recursosSobrantes as $recurso)
                                     <tr>
-                                        <td class="border px-4 py-2 ">1</td>
-                                        <td class="border px-4 py-2 ">Mtrícula 1</td>
-                                        <td class="border px-4 py-2 ">55</td>
-                                        <td class="border px-4 py-2 ">0%</td>
+                                        <!-- Datos del recurso ... -->
+                                        <td>{{ $recurso->id }}</td>
+                                        <td>{{ $recurso->categoria }}</td>
+                                        <td>{{ $recurso->cantidad - $recurso->disponibilidad }}</td>
+                                        <td>{{ $recurso->disponibilidad }}</td>
                                         <td class="border px-4 py-2 ">
-                                            <button wire:click="borrar(2)" class="eliminar-btn" onclick="Eliminar()" >Eliminar</button>
-                                            <button wire:click="borrar(2)" class="">Modificar</button>
+                                            <button class="" onclick="Eliminar({{ $recurso->id }})" >Eliminar</button>
                                         </td>
                                     </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4">No hay recursos utilizados.</td>
+                                            </tr>
+                                    @endforelse
+
                                 </table>
                             </div>
-
 
                             <!-- /.box-body -->
                         </div>
@@ -187,20 +193,12 @@
         <div class="control-sidebar-bg"></div>
     </div>
 
-    <!-- jQuery 2.1.4 -->
-    <script src="./Archivos/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-    <!-- Bootstrap 3.3.5 -->
-    <script src="./Archivos/bootstrap/js/bootstrap.min.js"></script>
-    <script src="./Archivos/dist/js/app.min.js"></script>
-    <script src="./Archivos/dist/js/demo.js"></script>
-
-
-    <!-- Mensaje para confirmar la eliminacion -->
-    
     <script>
-        function Eliminar() {
-           // const itemId = this.getAttribute('data-id');
-            // Muestra un mensaje de confirmación con SweetAlert
+
+        //-----------------------------------------------------
+        //   Mensaje para confirmar la eliminacion de un recurso
+    
+        function Eliminar(id) {
             Swal.fire({ title: '¿Estás seguro?',
               text: 'Esta acción no se puede deshacer',  icon: 'warning',
               showCancelButton: true, confirmButtonText: 'Sí, eliminar',
@@ -208,10 +206,11 @@
             }).then((result) => {
               if (result.isConfirmed) {
                 // logica de eliminar
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado', 'success');
-              }
+                window.location.href = "{{ url('/asistente') }}/" + id + "/delete";
+                }
             });
         };
+
       </script>
 
 </body>
